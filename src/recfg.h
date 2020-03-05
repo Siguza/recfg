@@ -162,6 +162,6 @@ typedef struct
 **/
 
 int recfg_check(void *mem, size_t size, size_t *offp);
-int recfg_walk(void *mem, size_t size, recfg_cb_t *cb, void *a);
+int recfg_walk(void *mem, size_t size, const recfg_cb_t *cb, void *a);
 
 #endif

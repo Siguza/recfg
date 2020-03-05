@@ -21,7 +21,7 @@ int recfg_check(void *mem, size_t size, size_t *offp)
     char *start = mem,
          *end   = start + size;
     recfg_cmd_t *cmd = mem;
-    while(end - (char*)cmd > 0)
+    while(end - (char*)cmd != 0) // != rather than > because ptrdiff is signed
     {
         REQ(end - (char*)cmd >= sizeof(recfg_cmd_t));
         switch(cmd->cmd)
@@ -31,7 +31,7 @@ int recfg_check(void *mem, size_t size, size_t *offp)
                 {
                     case kRecfgEnd:
                         REQ(cmd->data == 0);
-                        break;
+                        goto end;
                     case kRecfgDelay:
                         break;
                     default:
@@ -116,6 +116,7 @@ int recfg_check(void *mem, size_t size, size_t *offp)
                 REQ(false);
         }
     }
+end:;
     retval = kRecfgSuccess;
 
 out:;
@@ -123,14 +124,14 @@ out:;
     return retval;
 }
 
-int recfg_walk(void *mem, size_t size, recfg_cb_t *cb, void *a)
+int recfg_walk(void *mem, size_t size, const recfg_cb_t *cb, void *a)
 {
     int retval = kRecfgFailure,
         ret    = kRecfgSuccess;
     char *start = mem,
          *end   = start + size;
     recfg_cmd_t *cmd = mem;
-    while(end - (char*)cmd > 0)
+    while(end - (char*)cmd != 0) // != rather than > because ptrdiff is signed
     {
         if(cb->generic)
         {
@@ -158,7 +159,7 @@ int recfg_walk(void *mem, size_t size, recfg_cb_t *cb, void *a)
                                 goto out;
                             }
                         }
-                        break;
+                        goto end;
                     case kRecfgDelay:
                         if(cb->delay)
                         {
@@ -354,6 +355,7 @@ int recfg_walk(void *mem, size_t size, recfg_cb_t *cb, void *a)
                 goto out;
         }
     }
+end:;
     retval = ret;
 
 out:;
