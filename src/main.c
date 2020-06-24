@@ -103,7 +103,7 @@ int recfg(void *mem, size_t size, void *a)
     {
         REQ(len >= 0x320);
         REQ(strncmp(ptr + 0x280, "iBoot-", 6) == 0);
-        uint64_t base = *(uint64_t*)(ptr + 0x318),
+        uint64_t base = *(uint64_t*)(ptr + (*(uint32_t*)(ptr + 0x8) == 0x580017c1 /* ldr x1, 0x300 */ ? 0x300 : 0x318)),
                  top  = base + len;
         for(uint64_t *cur = (uint64_t*)(ptr + 0x320), *end = cur + ((len-0x320)/sizeof(*cur)); cur < end; ++cur)
         {
