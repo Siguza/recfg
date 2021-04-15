@@ -23,7 +23,7 @@
     { \
         if(!(expr)) \
         { \
-            ERR("!(" #expr ")"); \
+            if(warn) ERR("!(" #expr ")"); \
             goto out; \
         } \
     } while(0)

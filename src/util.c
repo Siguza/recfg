@@ -9,6 +9,7 @@
 **/
 
 #include <fcntl.h>              // open
+#include <stdbool.h>
 #include <stddef.h>             // size_t
 #include <unistd.h>             // close
 #include <sys/mman.h>           // mmap, munmap
@@ -19,6 +20,7 @@
 
 int file2mem(const char *path, int (*func)(void*, size_t, void*), void *arg)
 {
+    const bool warn = true; // for macros
     int retval = -1;
     int fd = -1;
     void *mem = MAP_FAILED;

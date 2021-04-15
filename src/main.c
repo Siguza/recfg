@@ -71,7 +71,7 @@ static int recfg_write64_cb(void *a, uint64_t *addr, uint64_t *data)
 static int recfg_do_range(char *mem, size_t size, char *base)
 {
     size_t err = 0;
-    if(recfg_check(mem, size, &err) != kRecfgSuccess)
+    if(recfg_check(mem, size, &err, true) != kRecfgSuccess)
     {
         ERR("Error at offset 0x%lx (sequence 0x%lx)", mem - base + err, mem - base);
         return -1;
@@ -91,6 +91,7 @@ static int recfg_do_range(char *mem, size_t size, char *base)
 
 int recfg(void *mem, size_t size, void *a)
 {
+    const bool warn = true; // for macros
     int retval = kRecfgFailure;
     recfg_arg_t *arg = a;
 
